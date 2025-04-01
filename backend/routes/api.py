@@ -27,3 +27,22 @@ def add_task():
 @api_blueprint.route('/api/get-tasks', methods=['GET'])
 def get_tasks():
     return {"tasks": [task.to_dict() for task in tasks]}
+
+@api_blueprint.route('/api/generate-schedule', methods=['GET'])
+def generate_schedule():
+    schedule = {
+        "Monday": [],
+        "Tuesday": [],
+        "Wednesday": [],
+        "Thursday": [],
+        "Friday": [],
+        "Saturday": [],
+        "Sunday": []
+    }
+
+    # Basic logic: assign tasks in order to each day
+    for i, task in enumerate(tasks):
+        day = list(schedule.keys())[i % 7]  # rotate through weekdays
+        schedule[day].append(task.to_dict())
+
+    return {"schedule": schedule}
