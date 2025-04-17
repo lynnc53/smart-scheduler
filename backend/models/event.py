@@ -1,4 +1,4 @@
-from __init__ import db  # now imports from __init__.py, not app.py
+from backend import db
 
 class Event(db.Model):
     __tablename__ = 'event'

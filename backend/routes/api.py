@@ -1,11 +1,10 @@
-# routes/api.py 
-
-from flask import Blueprint, request, jsonify
-from models.assignment import Assignment
-from models.exam import Exam 
-from models.quiz import Quiz 
-from models.event import Event 
-from __init__ import db
+from flask import Blueprint, request, jsonify, make_response
+from flask_cors import cross_origin
+from backend.models.assignment import Assignment
+from backend.models.exam import Exam
+from backend.models.quiz import Quiz
+from backend.models.event import Event
+from backend import db  # ✅ Correct way to import db
 
 api_blueprint = Blueprint('api', __name__)
 
@@ -17,12 +16,21 @@ def ping():
     return jsonify({'message': 'Smart Scheduler backend is running!'})
 
 # ----------------------------
-# Database-backed Assignment Route
+# CORS Test Route
+# ----------------------------
+@api_blueprint.route('/api/cors-test')
+def cors_test():
+    response = make_response({'message': 'CORS test passed!'})
+    response.headers['Access-Control-Allow-Origin'] = 'http://localhost:3000'
+    return response
+
+# ----------------------------
+# Add Assignment
 # ----------------------------
 @api_blueprint.route('/api/add-assignment', methods=['POST'])
 def add_assignment():
     data = request.json
-    print("📥 Received assignment data:", data)  # DEBUGGING PRINT
+    print("📥 Received assignment data:", data)
     new_assignment = Assignment(
         course_id=data['course_id'],
         title=data['title'],
@@ -32,15 +40,15 @@ def add_assignment():
     )
     db.session.add(new_assignment)
     db.session.commit()
-    return jsonify({'message': 'Assignment added!', 'assignment': new_assignment.to_dict()})
+    return jsonify({'message': 'Assignment added!', 'data': new_assignment.to_dict()})
 
 # ----------------------------
-# Database-backed Exams Route
+# Add Exam
 # ----------------------------
 @api_blueprint.route('/api/add-exam', methods=['POST'])
 def add_exam():
     data = request.json
-    print("📥 Received Exam data:", data)  # DEBUGGING PRINT
+    print("📥 Received exam data:", data)
     new_exam = Exam(
         course_id=data['course_id'],
         title=data['title'],
@@ -50,15 +58,15 @@ def add_exam():
     )
     db.session.add(new_exam)
     db.session.commit()
-    return jsonify({'message': 'Assignment added!', 'assignment': new_exam.to_dict()})
+    return jsonify({'message': 'Exam added!', 'data': new_exam.to_dict()})
 
 # ----------------------------
-# Database-backed Quiz Route
+# Add Quiz
 # ----------------------------
 @api_blueprint.route('/api/add-quiz', methods=['POST'])
 def add_quiz():
     data = request.json
-    print("📥 Received Quiz data:", data)  # DEBUGGING PRINT
+    print("📥 Received quiz data:", data)
     new_quiz = Quiz(
         course_id=data['course_id'],
         title=data['title'],
@@ -68,15 +76,15 @@ def add_quiz():
     )
     db.session.add(new_quiz)
     db.session.commit()
-    return jsonify({'message': 'Assignment added!', 'assignment': new_quiz.to_dict()})
+    return jsonify({'message': 'Quiz added!', 'data': new_quiz.to_dict()})
 
 # ----------------------------
-# Database-backed Event Route
+# Add Event
 # ----------------------------
-@api_blueprint.route('/api/add-Event', methods=['POST'])
+@api_blueprint.route('/api/add-event', methods=['POST'])
 def add_event():
     data = request.json
-    print("📥 Received Event data:", data)  # DEBUGGING PRINT
+    print("📥 Received event data:", data)
     new_event = Event(
         title=data['title'],
         date=data['date'],
@@ -84,12 +92,13 @@ def add_event():
     )
     db.session.add(new_event)
     db.session.commit()
-    return jsonify({'message': 'Assignment added!', 'assignment': new_event.to_dict()})
+    return jsonify({'message': 'Event added!', 'data': new_event.to_dict()})
 
 # ----------------------------
 # Get All Assignments
 # ----------------------------
 @api_blueprint.route('/api/get-assignments', methods=['GET'])
+@cross_origin(origin='http://localhost:3000')  # ✅ This enables CORS
 def get_assignments():
     assignments = Assignment.query.all()
     return jsonify({'assignments': [a.to_dict() for a in assignments]})
@@ -100,20 +109,20 @@ def get_assignments():
 @api_blueprint.route('/api/get-exams', methods=['GET'])
 def get_exams():
     exams = Exam.query.all()
-    return jsonify({'exams': [a.to_dict() for a in exams]})
+    return jsonify({'exams': [e.to_dict() for e in exams]})
 
 # ----------------------------
 # Get All Quizzes
 # ----------------------------
-@api_blueprint.route('/api/get-quiz', methods=['GET'])
-def get_quiz():
-    quiz = Quiz.query.all()
-    return jsonify({'quiz': [a.to_dict() for a in quiz]})
+@api_blueprint.route('/api/get-quizzes', methods=['GET'])
+def get_quizzes():
+    quizzes = Quiz.query.all()
+    return jsonify({'quizzes': [q.to_dict() for q in quizzes]})
 
 # ----------------------------
 # Get All Events
 # ----------------------------
-@api_blueprint.route('/api/get-quiz', methods=['GET'])
-def get_quiz():
+@api_blueprint.route('/api/get-events', methods=['GET'])
+def get_events():
     events = Event.query.all()
-    return jsonify({'events': [a.to_dict() for a in events]})
+    return jsonify({'events': [e.to_dict() for e in events]})
