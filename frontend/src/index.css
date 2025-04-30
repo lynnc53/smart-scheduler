@@ -1,0 +1,106 @@
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  background-color: #f5f5f5;
+  margin: 0;
+  padding: 2rem;
+  color: #333;
+}
+
+h1 {
+  font-size: 2rem;
+  margin-bottom: 0.25rem;
+}
+
+h2 {
+  font-size: 1.25rem;
+  color: #444;
+  margin-bottom: 1rem;
+}
+
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.calendar {
+  border: 1px solid #ccc;
+  background: white;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.calendar-header {
+  display: grid;
+  grid-template-columns: 60px repeat(7, 1fr);
+  background: #eee;
+  font-weight: bold;
+  text-align: center;
+  border-bottom: 1px solid #ccc;
+}
+
+.calendar-body {
+  display: grid;
+  grid-template-rows: repeat(15, 60px);
+}
+
+.calendar-row {
+  display: grid;
+  grid-template-columns: 60px repeat(7, 1fr);
+  border-bottom: 1px solid #eee;
+}
+
+.time-label {
+  background: #fafafa;
+  border-right: 1px solid #ddd;
+  text-align: right;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  color: #666;
+}
+
+.calendar-day-header {
+  padding: 0.5rem;
+  border-left: 1px solid #ddd;
+  font-size: 0.875rem;
+}
+
+.calendar-cell {
+  border-left: 1px solid #f0f0f0;
+  padding: 0.25rem;
+  position: relative;
+}
+
+.study-block {
+  background-color: #007bff;
+  color: white;
+  font-size: 0.75rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.assignment-form {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.5rem;
+  justify-content: center;
+}
+
+.assignment-form input,
+.assignment-form button {
+  padding: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.assignment-form button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
