@@ -7,8 +7,7 @@ db = SQLAlchemy()
 def create_app():
     app = Flask(__name__)
 
-    # ✅ Correct CORS config
-    CORS(app, origins=["http://localhost:3000"])
+    CORS(app, origins=["http://localhost:5173", "http://127.0.0.1:5173"])
 
     app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://scheduler_user:Delasalle33!@localhost/smart_scheduler'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False

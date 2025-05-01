@@ -1,6 +1,6 @@
-from backend import create_app  # imports your app factory
+from backend import create_app
 
-app = create_app()  # initializes your app with config, db, CORS, blueprints, etc.
+app = create_app()
 
 if __name__ == "__main__":
-    app.run(debug=True)  # only runs if you run this file directly
+    app.run(debug=True)

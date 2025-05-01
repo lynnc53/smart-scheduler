@@ -104,3 +104,27 @@ h2 {
   border-radius: 4px;
 }
 
+.study-block.assignment {
+  background-color: #007bff;
+}
+
+.study-block.quiz {
+  background-color: #ffc107;
+}
+
+.study-block.exam {
+  background-color: #dc3545;
+}
+
+.study-block.event {
+  background-color: #28a745;
+}
+
+.study-block {
+  color: white;
+  font-size: 0.75rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  text-align: center;
+  margin-bottom: 2px;
+}

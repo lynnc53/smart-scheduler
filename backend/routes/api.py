@@ -1,10 +1,10 @@
 from flask import Blueprint, request, jsonify, make_response
-from flask_cors import cross_origin
 from backend.models.assignment import Assignment
 from backend.models.exam import Exam
 from backend.models.quiz import Quiz
 from backend.models.event import Event
-from backend import db  # ✅ Correct way to import db
+from backend import db  
+import ics
 
 api_blueprint = Blueprint('api', __name__)
 
@@ -15,15 +15,32 @@ api_blueprint = Blueprint('api', __name__)
 def ping():
     return jsonify({'message': 'Smart Scheduler backend is running!'})
 
-# ----------------------------
-# CORS Test Route
-# ----------------------------
-@api_blueprint.route('/api/cors-test')
-def cors_test():
-    response = make_response({'message': 'CORS test passed!'})
-    response.headers['Access-Control-Allow-Origin'] = 'http://localhost:3000'
-    return response
+# Add acorn schedule 
 
+
+@api_blueprint.route('/api/upload-acorn-ics', methods=['POST'])
+def upload_acorn_ics():
+    if 'file' not in request.files:
+        return jsonify({'error': 'No file uploaded'}), 400
+
+    file = request.files['file']
+    calendar = ics.Calendar(file.read().decode('utf-8'))
+
+    for event in calendar.events:
+        title = event.name or "Untitled"
+        date = event.begin.datetime
+        duration_hours = event.duration.total_seconds() / 3600.0
+
+        new_event = Event(
+            title=title,
+            date=date,
+            duration=duration_hours
+        )
+
+        db.session.add(new_event)
+
+    db.session.commit()
+    return jsonify({'message': '✅ Timetable imported successfully!'})
 # ----------------------------
 # Add Assignment
 # ----------------------------
@@ -31,16 +48,24 @@ def cors_test():
 def add_assignment():
     data = request.json
     print("📥 Received assignment data:", data)
-    new_assignment = Assignment(
-        course_id=data['course_id'],
-        title=data['title'],
-        due_date=data['due_date'],
-        estimated_hours=data.get('estimated_hours'),
-        weight=data.get('weight')
-    )
-    db.session.add(new_assignment)
-    db.session.commit()
-    return jsonify({'message': 'Assignment added!', 'data': new_assignment.to_dict()})
+
+    try:
+        new_assignment = Assignment(
+            course_id=int(data['course_id']),
+            title=data['title'],
+            due_date=data['due_date'],
+            estimated_hours=int(data.get('estimated_hours', 0)),
+            weight=int(data.get('weight', 0))
+        )
+        db.session.add(new_assignment)
+        db.session.commit()
+        print("✅ Assignment saved to database.")
+        return jsonify({'message': 'Assignment added!', 'data': new_assignment.to_dict()})
+
+    except Exception as e:
+        db.session.rollback()
+        print("❌ Error saving assignment:", str(e))
+        return jsonify({'error': str(e)}), 500
 
 # ----------------------------
 # Add Exam
@@ -98,9 +123,9 @@ def add_event():
 # Get All Assignments
 # ----------------------------
 @api_blueprint.route('/api/get-assignments', methods=['GET'])
-@cross_origin(origin='http://localhost:3000')  # ✅ This enables CORS
 def get_assignments():
     assignments = Assignment.query.all()
+    print("📦 Returning", len(assignments), "assignments")
     return jsonify({'assignments': [a.to_dict() for a in assignments]})
 
 # ----------------------------
