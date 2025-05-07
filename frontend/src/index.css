@@ -128,3 +128,28 @@ h2 {
   text-align: center;
   margin-bottom: 2px;
 }
+
+.legend {
+  display: flex;
+  gap: 1rem;
+  margin: 1rem 0;
+  font-size: 0.9rem;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.legend-color {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+}
+
+.legend-color.assignment { background-color: #007bff; }
+.legend-color.quiz { background-color: #ffc107; }
+.legend-color.exam { background-color: #dc3545; }
+.legend-color.event { background-color: #28a745; }

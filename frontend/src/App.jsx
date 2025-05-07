@@ -181,6 +181,13 @@ function App() {
         <input type="number" name="duration" placeholder="Duration" value={event.duration} onChange={handleEventChange} />
         <button type="submit">Add Event</button>
       </form>
+      
+      <div className="legend">
+        <span className="legend-item"><span className="legend-color assignment"></span> Assignment</span>
+        <span className="legend-item"><span className="legend-color quiz"></span> Quiz</span>
+        <span className="legend-item"><span className="legend-color exam"></span> Exam</span>
+        <span className="legend-item"><span className="legend-color event"></span> Event</span>
+      </div>
 
       <div className="calendar">
         <div className="calendar-header">
@@ -195,6 +202,7 @@ function App() {
             );
           })}
         </div>
+      
 
         <div className="calendar-body">
           {[...Array(15)].map((_, i) => {
