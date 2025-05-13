@@ -3,7 +3,7 @@ from backend import db
 class Exam(db.Model):
     __tablename__ = 'exam'
     id = db.Column(db.Integer, primary_key=True)
-    course_id = db.Column(db.Integer, nullable=False)
+    course_id = db.Column(db.String(10), nullable=False)
     title = db.Column(db.String(255), nullable=False)
     date = db.Column(db.DateTime, nullable=False)  
     duration = db.Column(db.Float)

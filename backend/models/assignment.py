@@ -3,7 +3,7 @@ from backend import db
 class Assignment(db.Model):
     __tablename__ = 'assignments'
     id = db.Column(db.Integer, primary_key=True)
-    course_id = db.Column(db.Integer, nullable=False)
+    course_id = db.Column(db.String(10), nullable=False)
     title = db.Column(db.String(255), nullable=False)
     due_date = db.Column(db.DateTime, nullable=False)
     estimated_hours = db.Column(db.Float)

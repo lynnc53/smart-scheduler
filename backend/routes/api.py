@@ -51,7 +51,7 @@ def add_assignment():
 
     try:
         new_assignment = Assignment(
-            course_id=int(data['course_id']),
+            course_id=data['course_id'],
             title=data['title'],
             due_date=data['due_date'],
             estimated_hours=int(data.get('estimated_hours', 0)),
@@ -91,7 +91,7 @@ def add_exam():
 @api_blueprint.route('/api/add-quiz', methods=['POST'])
 def add_quiz():
     data = request.json
-    print("📥 Received quiz data:", data)
+    print("Received quiz data:", data)
     new_quiz = Quiz(
         course_id=data['course_id'],
         title=data['title'],
@@ -151,3 +151,44 @@ def get_quizzes():
 def get_events():
     events = Event.query.all()
     return jsonify({'events': [e.to_dict() for e in events]})
+
+## DELETE 
+@api_blueprint.route('/api/delete-all-assignments', methods=['POST'])
+def delete_all_assignments():
+    try:
+        Assignment.query.delete()
+        db.session.commit()
+        return jsonify({'message': 'All assignments deleted.'})
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': str(e)}), 500
+
+@api_blueprint.route('/api/delete-all-quizzes', methods=['POST'])
+def delete_all_quizzes():
+    try:
+        Quiz.query.delete()
+        db.session.commit()
+        return jsonify({'message': 'All quizzes deleted.'})
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': str(e)}), 500
+
+@api_blueprint.route('/api/delete-all-exams', methods=['POST'])
+def delete_all_exams():
+    try:
+        Exam.query.delete()
+        db.session.commit()
+        return jsonify({'message': 'All exams deleted.'})
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': str(e)}), 500
+
+@api_blueprint.route('/api/delete-all-events', methods=['POST'])
+def delete_all_events():
+    try:
+        Event.query.delete()
+        db.session.commit()
+        return jsonify({'message': 'All events deleted.'})
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': str(e)}), 500
